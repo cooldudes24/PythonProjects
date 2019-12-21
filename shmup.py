@@ -39,7 +39,7 @@ class Santa(pygame.sprite.Sprite):
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Cooldudes24 and Basherboy1 Shmup Game")
+pygame.display.set_caption("Awesome Shmup Game")
 clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
@@ -56,12 +56,14 @@ class Player(pygame.sprite.Sprite):
 		self.speedx = 0
 		keystate = pygame.key.get_pressed()
 		if keystate[pygame.K_LEFT]:
-			self.speedx = -5
+			self.speedx = -9
 		if keystate[pygame.K_RIGHT]:
-			self.speedx = 5
+			self.speedx = 9
 		self.rect.x += self.speedx
-		if self.rect.right > WIDTH
-		if self.rect.left
+		if self.rect.right > WIDTH:
+			self.rect.right = WIDTH
+		if self.rect.left < 0:
+			self.rect.left = 0
 
 all_sprites = pygame.sprite.Group()
 santa = Santa()
