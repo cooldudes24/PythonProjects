@@ -45,8 +45,10 @@ clock = pygame.time.Clock()
 class Player(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface((50, 40))
-		self.image.fill(BLACK)
+		self.image = pygame.image.load(os.path.join(img_folder, "ship.png")).convert()
+		self.image.set_colorkey(WHITE)
+		#self.image = pygame.Surface((50, 40))
+		#self.image.fill(BLACK)
 		self.rect = self.image.get_rect()
 		self.rect.centerx = WIDTH / 2
 		self.rect.bottom = HEIGHT - 10
@@ -64,6 +66,20 @@ class Player(pygame.sprite.Sprite):
 			self.rect.right = WIDTH
 		if self.rect.left < 0:
 			self.rect.left = 0
+
+class Mob(pygame.sprite.Sprite):
+	def __init__(self):
+		pygame.sprite.Sprite.__init(self)
+		self.image = pygame.surface((30,40))
+		self.image.fill(RED)
+		self.rect = self.image.get_rect()
+
+def update(self):
+	self.rect.y += self.speedy
+	if self.rect.top > HEIGHT + 10:
+		self.rect.x = random.randrange(WIDTH - self.rect.rect.width)
+		self.rect.y = random.randrange(-100, -40)
+		self.speedy = random.randrange(1, 8)
 
 all_sprites = pygame.sprite.Group()
 santa = Santa()
