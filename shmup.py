@@ -45,8 +45,7 @@ clock = pygame.time.Clock()
 class Player(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface((50, 40))
-		self.image.fill(BLACK)
+		self.image = pygame.image.load(os.path.join(img_folder, "player1.PNG")).convert()
 		self.rect = self.image.get_rect()
 		self.rect.centerx = WIDTH / 2
 		self.rect.bottom = HEIGHT - 10
@@ -56,9 +55,9 @@ class Player(pygame.sprite.Sprite):
 		self.speedx = 0
 		keystate = pygame.key.get_pressed()
 		if keystate[pygame.K_LEFT]:
-			self.speedx = -5
+			self.speedx = -3
 		if keystate[pygame.K_RIGHT]:
-			self.speedx = 5
+			self.speedx = 3
 		self.rect.x += self.speedx
 		if self.rect.right > WIDTH:
 			self.rect.right = WIDTH
@@ -68,12 +67,13 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface((30, 40))
-		self.image.fill(RED)
+		#self.image = pygame.Surface((30, 40))
+		#self.image.fill(RED)
+		self.image = pygame.image.load(os.path.join(img_folder, "small_ufo.png")).convert()
 		self.rect = self.image.get_rect()
 		self.rect.x = random.randrange(WIDTH - self.rect.width)
 		self.rect.y = random.randrange(-100, -40)
-		self.speedy = random.randrange(1, 8)
+		self.speedy = random.randrange(1, 5)
 
 	def update(self):
 		self.rect.y += self.speedy
@@ -86,7 +86,7 @@ all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
-for i in range(8):
+for i in range(6):
 	m = Mob()
 	all_sprites.add(m)
 	mobs.add(m)
