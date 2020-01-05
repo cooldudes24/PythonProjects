@@ -24,15 +24,15 @@ class Santa(pygame.sprite.Sprite):
 		self.image.set_colorkey(GREEN)
 		self.rect = self.image.get_rect()
 		self.rect.center = (WIDTH / 2, HEIGHT / 2)
-		self.y_speed = 5
+		self.y_speed = 8
 
 	def update(self):
 		self.rect.x += 5
 		self.rect.y += self.y_speed
 		if self.rect.bottom > HEIGHT - 200:
-			self.y_speed = -5
+			self.y_speed = -8
 		if self.rect.top < 200:
-			self.y_speed = 5
+			self.y_speed = 8
 		if self.rect.left > WIDTH:
 			self.rect.right = 0
 # initialize pygame and create window
@@ -45,7 +45,7 @@ clock = pygame.time.Clock()
 class Player(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.image.load(os.path.join(img_folder, "player1.PNG")).convert()
+		self.image = pygame.image.load(os.path.join(img_folder, "player1edited.PNG")).convert()
 		self.rect = self.image.get_rect()
 		self.rect.centerx = WIDTH / 2
 		self.rect.bottom = HEIGHT - 10
@@ -55,25 +55,30 @@ class Player(pygame.sprite.Sprite):
 		self.speedx = 0
 		keystate = pygame.key.get_pressed()
 		if keystate[pygame.K_LEFT]:
-			self.speedx = -3
+			self.speedx = -5
 		if keystate[pygame.K_RIGHT]:
-			self.speedx = 3
+			self.speedx = 5
 		self.rect.x += self.speedx
 		if self.rect.right > WIDTH:
 			self.rect.right = WIDTH
 		if self.rect.left < 0:
 				self.rect.left = 0
 
+	def shoot(self):
+		bullet = Bullet(self.rect.centerx, self.rect.top)
+		all_sprites.add(bullet)
+		bullets.add(bullet)
+
 class Mob(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
 		#self.image = pygame.Surface((30, 40))
 		#self.image.fill(RED)
-		self.image = pygame.image.load(os.path.join(img_folder, "small_ufo.png")).convert()
+		self.image = pygame.image.load(os.path.join(img_folder, "ufo_trans.png")).convert()
 		self.rect = self.image.get_rect()
 		self.rect.x = random.randrange(WIDTH - self.rect.width)
 		self.rect.y = random.randrange(-100, -40)
-		self.speedy = random.randrange(1, 5)
+		self.speedy = random.randrange(1, 8)
 
 	def update(self):
 		self.rect.y += self.speedy
@@ -82,11 +87,28 @@ class Mob(pygame.sprite.Sprite):
 			self.rect.y = random.randrange(-100, -40)
 			self.speedy = random.randrange(1, 8)
 
+class Bullet(pygame.sprite.Sprite):
+	def __init__(self, x: object, y: object) -> object:
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.Surface((10, 20))
+		self.image.fill(BLUE)
+		self.rect = self.image.get_rect()
+		self.rect.bottom = y
+		self.rect.centerx = x
+		self.speedy = -10
+
+	def update(self):
+		self.rect.y += self.speedy
+		# kill if it moves off the top of the screen
+		if self.rect.bottom < 0:
+			self.kill()
+
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
-for i in range(6):
+for i in range(5):
 	m = Mob()
 	all_sprites.add(m)
 	mobs.add(m)
@@ -101,9 +123,25 @@ while running:
 		# check for closing window
 		if event.type == pygame.QUIT:
 			running = False
+		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_SPACE:
+				player.shoot()
 
 	# Update
 	all_sprites.update()
+
+	# check to see if a bullet hit a mob
+	hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
+	for hit in hits:
+		m = Mob()
+		all_sprites.add(m)
+		mobs.add(m)
+
+	# check to see if a mob hit a player
+	hits = pygame.sprite.spritecollide(player, mobs, False)
+	if hits:
+		running = False
+
 	# Draw / render
 	screen.fill(GREEN)
 	all_sprites.draw(screen)
