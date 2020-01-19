@@ -104,12 +104,22 @@ class Bullet(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.bottom = y
 
-def update(self):
-	self.rect.y += self.speedy
-	# wreck it if it moves off the top of the screen
-	if self.rect.bottom < 0:
-		self.kill()
+class Bullet(pygame.sprite.Sprite):
+	def __init__(self, x: object, y: object) -> object:
+		pygame.sprite.Sprite.__init__(self)
+		self.image = bullet_img
+		self.image.set_colorkey(BLACK)
+		self.rect = self.image.get_rect()
+		self.rect.bottom = y
+		self.rect.centerx = x
+		self.speedy = -10
 
+	def update(self):
+		self.rect.y += self.speedy
+		# kill if it moves off the top of the screen
+		if self.rect.bottom < 0:
+			self.kill()
+			
 # Load all game graphics
 background = pygame.image.load(path.join(img_dir, "background1.png")).convert()
 background_rect = background.get_rect()
