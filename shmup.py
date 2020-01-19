@@ -1,7 +1,11 @@
 # Shmup game
 import pygame
 import random
-import os
+from os import path
+
+img_dir = path.join(path.dirname(__file__), 'img')
+img_meteor_dir = path.join(img_dir, 'Meteors')
+img_laser_dir = path.join(img_dir, 'Lasers')
 
 WIDTH = 480
 HEIGHT = 600
@@ -13,8 +17,9 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
-game_folder = os.path.dirname(__file__)
-img_folder = os.path.join(game_folder, "img")
+
+game_folder = path.dirname(__file__)
+img_folder = path.join(game_folder, "img")
 
 class Santa(pygame.sprite.Sprite):
     # sprite for the player
@@ -45,7 +50,7 @@ clock = pygame.time.Clock()
 class Player(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.image.load(os.path.join(img_folder, "ship.png")).convert()
+		self.image = pygame.image.load(path.join(img_folder, "ship.png")).convert()
 		self.image.set_colorkey(WHITE)
 		#self.image = pygame.Surface((50, 40))
 		#self.image.fill(BLACK)
@@ -98,15 +103,20 @@ class Bullet(pygame.sprite.Sprite):
 		self.image.fill(YELLOW)
 		self.rect = self.image.get_rect()
 		self.rect.bottom = y
-		self.rect.centerx = x
-		self.speedy = -10
 
-	def update(self):
-		self.rect.y += self.speedy
-		# wreck it if it moves off the top of the screen
-		if self.rect.bottom < 0:
-			self.kill()
+def update(self):
+	self.rect.y += self.speedy
+	# wreck it if it moves off the top of the screen
+	if self.rect.bottom < 0:
+		self.kill()
 
+# Load all game graphics
+background = pygame.image.load(path.join(img_dir, "background1.png")).convert()
+background_rect = background.get_rect()
+player_img = pygame.image.load(path.join(img_dir, "ship.png")).convert()
+meteor_img = pygame.image.load(path.join(img_meteor_dir, "meteorBrown_med1.png")).convert()
+player_img = pygame.image.load(path.join(img_dir, "ship.png")).convert()
+bullet_img = pygame.image.load(path.join(img_laser_dir, "laserBlue16.png"))
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
@@ -145,6 +155,7 @@ while running:
 
 	# Draw / render
 	screen.fill(GREEN)
+	screen.blit(background, background_rect)
 	all_sprites.draw(screen)
 	# *after* drawing everything, flip the display
 	pygame.display.flip()
