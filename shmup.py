@@ -44,7 +44,7 @@ class Santa(pygame.sprite.Sprite):
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Awesome Shmup Game")
+pygame.display.set_caption("Awesome Shmup Game!")
 clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
@@ -55,6 +55,8 @@ class Player(pygame.sprite.Sprite):
 		#self.image = pygame.Surface((50, 40))
 		#self.image.fill(BLACK)
 		self.rect = self.image.get_rect()
+		self.radius =  20
+		# pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
 		self.rect.centerx = WIDTH / 2
 		self.rect.bottom = HEIGHT - 10
 		self.speedx = 0
@@ -81,12 +83,14 @@ class Mob(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.Surface((30, 40))
-		self.image.fill(RED)
+		self.image. fill(BLACK)
 		self.rect = self.image.get_rect()
+		self.radius = int(self.rect.width * .85/ 2)
+		pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
 		self.rect.x = random.randrange(WIDTH - self.rect.width)
 		self.rect.y = random.randrange(-100, -40)
 		self.rect.y = random.randrange(1, 8)
-		self.speedy = random.randrange(-3, 3)
+		self.speedy = random.randrange(1, 4)
 
 	def update(self):
 		#self.rect.x += self.speedx
@@ -119,7 +123,7 @@ class Bullet(pygame.sprite.Sprite):
 		# kill if it moves off the top of the screen
 		if self.rect.bottom < 0:
 			self.kill()
-			
+
 # Load all game graphics
 background = pygame.image.load(path.join(img_dir, "background1.png")).convert()
 background_rect = background.get_rect()
@@ -159,7 +163,7 @@ while running:
 		all_sprites.add(m)
 		mobs.add(m)
 	# check if a mob hit the player
-	hits = pygame.sprite.spritecollide(player, mobs, False)
+	hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
 	if hits:
 		running = False
 
