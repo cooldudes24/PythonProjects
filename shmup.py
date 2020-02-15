@@ -86,7 +86,7 @@ class Mob(pygame.sprite.Sprite):
 		self.image. fill(BLACK)
 		self.rect = self.image.get_rect()
 		self.radius = int(self.rect.width * .85/ 2)
-		pygame.draw.circle(self.image, meteor_img, self.rect.center, self.radius)
+		pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
 		self.rect.x = random.randrange(WIDTH - self.rect.width)
 		self.rect.y = random.randrange(-100, -40)
 		self.rect.y = random.randrange(1, 8)
