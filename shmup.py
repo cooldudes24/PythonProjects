@@ -84,10 +84,12 @@ class Mob(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.speedx = random.randrange(-2, 2)
 		self.radius = int(self.rect.width * .85 / 2)
+		# pygame.draw.circle(self-image-whatever)
 		#BlaBlaBlaBlaBlaBla!
 		self.rect.x = random.randrange(WIDTH - self.rect.width)
 		self.rect.y = random.randrange(-100, -40)
 		self.speedy = random.randrange(1, 8)
+		self.speedx = random.randrange(-3, 3)
 		self.rot = 0
 		self.rot_speed = random.randrange(-8, 8)
 		self.last_update = pygame.time.get_ticks()
@@ -100,6 +102,7 @@ class Mob(pygame.sprite.Sprite):
 			self.image = pygame.transform.rotate(self.image_orig, self.rot)
 
 	def update(self):
+		self.rotate()
 		self.rect.x += self.speedx
 		self.rect.y += self.speedy
 		if self.rect.top > HEIGHT + 10:
